@@ -1,0 +1,3 @@
+Hello {{user.username}}
+Welcome to Exhibit Pitch
+We are happy that you have signed up to our application and want to welcome you to the family. Please enjoy the pitches posted by other users and feel free to add your too.
