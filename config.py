@@ -10,7 +10,7 @@ class ProdConfig(Config):
     Args:
         Config: The parent configuration class with General configuration settings
     '''
-    DEBUG = True
+    pass
 
 class TestConfig(Config):
     pass
