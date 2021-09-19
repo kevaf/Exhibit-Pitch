@@ -19,7 +19,7 @@ def index():
     employee_piches = Pitch.get_pitches('employee')
     investor_pitches = Pitch.get_pitches('investor')
 
-    return render_template('index.html', title = title)
+    return render_template('index.html', title = title, customer = customer_piches, employee = employee_piches, investor = investor_pitches)
 
 
 @main.route('/user/<uname>')
@@ -61,3 +61,4 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))
+
