@@ -1,6 +1,8 @@
 from flask import render_template,request,redirect,url_for, abort
+from flask.signals import template_rendered
+from sqlalchemy.orm import load_only
 from app.main import main
-from .forms import UpdateProfile
+from .forms import UpdateProfile, PitchForm, ReviewForm
 from ..models import User, Pitch, Review
 from flask_login import login_required, current_user
 from .. import db, photos
@@ -15,11 +17,11 @@ def index():
 
     title = 'Home - Welcome to Exhibit Pitch'
      # Getting reviews by category
-    customer_piches = Pitch.get_pitches('customer')
-    employee_piches = Pitch.get_pitches('employee')
+    customer_pitches = Pitch.get_pitches('customer')
+    employee_pitches = Pitch.get_pitches('employee')
     investor_pitches = Pitch.get_pitches('investor')
 
-    return render_template('index.html', title = title, customer = customer_piches, employee = employee_piches, investor = investor_pitches)
+    return render_template('index.html', title = title, customer = customer_pitches, employee = employee_pitches, investor= investor_pitches)
 
 
 @main.route('/user/<uname>')
@@ -61,4 +63,77 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))
+
+@main.route('/pitch/new', methods = ['GET','POST'])
+@login_required
+def new_pitch():
+    pitch_form = PitchForm()
+    if pitch_form.validate_on_submit():
+        title = pitch_form.title.data
+        pitch = pitch_form.text.data
+        category = pitch_form.category.data
+
+        # Updated pitch instance
+        new_pitch = Pitch(pitch_title=title,pitch_content=pitch,category=category,user=current_user,likes=0,dislikes=0)
+
+        # Save pitch method
+        new_pitch.save_pitch()
+        return redirect(url_for('.index'))
+
+    title = 'New pitch'
+    return render_template('new_pitch.html',title = title,pitch_form=pitch_form )
+
+@main.route('/pitch/<int:id>', methods = ['GET','POST'])
+@login_required
+def pitch(id):
+    pitch = Pitch.get_pitch(id)
+    posted_date = pitch.posted.strftime('%b %d, %Y')
+
+    if request.args.get("upvote"):
+        pitch.upvote = pitch.upvote + 1
+
+        db.session.add(pitch)
+        db.session.commit()
+
+        return redirect("/pitch/{pitches_id}".format(pitches_id=pitch.id))
+
+    elif request.args.get("downvote"):
+        pitch.downvote = pitch.downvote + 1
+
+        db.session.add(pitch)
+        db.session.commit()
+
+        return redirect("/pitch/{pitches_id}".format(pitches_id=pitch.id))
+
+    review_form = ReviewForm()
+    if review_form.validate_on_submit():
+        review = review_form.text.data
+
+        new_review = Review(review = review,user = current_user,p_id = pitch)
+
+        new_review.save_comment()
+
+
+    comments = Review.get_comments(pitch)
+
+    return render_template("pitch.html", pitch = pitch, comment_form = review_form, comments = comments, date = posted_date)
+
+@main.route('/investor')
+@login_required
+def investor():
+    title= 'this investor template'
+    return render_template('investors_pitches.html',title=title)
+
+@main.route('/employee')
+@login_required
+def employee():
+    title= 'Pitch to Employees'
+    return render_template('employees_pitches.html',title=title)
+
+@main.route('/customer')
+@login_required
+def emplocustomer():
+    title= 'Pitch to Employees'
+    return render_template('employees_pitches.html',title=title)
+
 
