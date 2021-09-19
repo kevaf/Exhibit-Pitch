@@ -1,0 +1,17 @@
+{% macro displayPitches(pitches_list)%} {%for pitch in pitches_list%}
+
+
+<div class="well well-lg">
+    <h4>{{pitch.p_title}}</h4>
+    <p>{{pitch.p_body| truncate(100)}}</p>
+    <p>Written by: {{pitch.user.username}} <a href="/pitch/{{pitch.id}}" class="btn btn-primary pull-right">Read</a> </p>
+</div>
+</div>
+
+{%endfor%} {%endmacro%} {%macro displayReviews(reviews_list)%} {%for review in reviews_list%}
+
+<h5>{{review.user.username}}</h5>
+<p>{{review.comment}}</p>
+
+
+{%endfor%} {%endmacro%}

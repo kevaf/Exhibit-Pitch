@@ -3,9 +3,10 @@ class Config:
     '''
     General configuration parent class
     '''
-    SECRET_KEY = ''
+ 
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://moringa:kev2214@localhost/exhibitpitch'
     UPLOADED_PHOTOS_DEST ='app/static/photos'
+    SECRET_KEY = 'kev'
 
     #  email configurations
     MAIL_SERVER = 'smtp.googlemail.com'

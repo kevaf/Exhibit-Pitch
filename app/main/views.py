@@ -1,10 +1,10 @@
 from flask import render_template,request,redirect,url_for, abort
 from app.main import main
 from .forms import UpdateProfile
-from ..models import User
+from ..models import User, Pitch, Review
 from flask_login import login_required, current_user
 from .. import db, photos
-
+import datetime
 
 #views
 @main.route('/')
@@ -14,6 +14,11 @@ def index():
     '''
 
     title = 'Home - Welcome to Exhibit Pitch'
+     # Getting reviews by category
+    customer_piches = Pitch.get_pitches('customer')
+    employee_piches = Pitch.get_pitches('employee')
+    investor_pitches = Pitch.get_pitches('investor')
+
     return render_template('index.html', title = title)
 
 
