@@ -3,7 +3,7 @@ class Config:
     '''
     General configuration parent class
     '''
- 
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_GB")
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://moringa:kev2214@localhost/tests'
     UPLOADED_PHOTOS_DEST ='app/static/photos'
     SECRET_KEY = 'kev'
