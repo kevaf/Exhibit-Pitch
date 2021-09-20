@@ -13,9 +13,5 @@
 {%macro displayReviews(reviews_list)%} 
 <h3>Reviews</h3> <hr>
 {%for review in reviews_list%}
-
-<h5>{{review.user.username}}</h5>
-<p>{{review.review}}</p>
-
-
+<p>User {{review.user.username| capitalize}} says: {{review.review| capitalize}}</p>
 {%endfor%} {%endmacro%}

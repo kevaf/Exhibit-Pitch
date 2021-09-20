@@ -23,6 +23,15 @@ def index():
 
     return render_template('index.html', title = title, customer = customer_pitches, employee = employee_pitches, investor= investor_pitches)
 
+@main.route('/home')
+def home():
+    '''
+    View root page function that returns the home page and its data
+    '''
+
+    title = 'Home - Welcome to Exhibit Pitch'
+
+    return render_template('home.html', title = title)
 
 @main.route('/user/<uname>')
 def profile(uname):
@@ -140,3 +149,10 @@ def customer():
     return render_template('customer_pitches.html',title=title, pitches=pitches)
 
 
+@main.route('/user/<uname>/pitches')
+def user_pitches(uname):
+    user = User.query.filter_by(username=uname).first()
+    pitches = Pitch.query.filter_by(user_id = user.id).all()
+    pitches_count = Pitch.count_pitches(uname)
+
+    return render_template("profile/pitches.html", user=user,pitches=pitches,pitches_count=pitches_count)
