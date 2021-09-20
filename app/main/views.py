@@ -89,9 +89,6 @@ def pitch(id):
     pitch = Pitch.get_pitch(id)
     posted_date = pitch.posted_date.strftime('%b %d, %Y')
     
-    # comments = Review
-    comments = Review.get_reviews(pitch)
-
     if request.args.get("upvote"):
         pitch.upvote = pitch.upvote + 1
 
@@ -117,15 +114,16 @@ def pitch(id):
         new_review.save_review()
 
 
-    
+    reviews = Review.get_reviews(pitch)
 
-    return render_template("pitch.html", pitch = pitch, comment_form = review_form, comments = comments, date = posted_date)
+    return render_template("pitch.html", pitch = pitch, review_form = review_form, reviews = reviews, date = posted_date)
 
 @main.route('/investor')
 @login_required
 def investor():
+    pitches = Pitch.get_pitches('investor')
     title= 'this investor template'
-    return render_template('investors_pitches.html',title=title)
+    return render_template('investors_pitches.html',title=title, pitches = pitches)
 
 @main.route('/employee')
 @login_required
@@ -136,8 +134,9 @@ def employee():
 
 @main.route('/customer')
 @login_required
-def emplocustomer():
-    title= 'Pitch to Employees'
-    return render_template('employees_pitches.html',title=title)
+def customer():
+    pitches = Pitch.get_pitches('customer')
+    title= 'Pitch to Customers'
+    return render_template('customer_pitches.html',title=title, pitches=pitches)
 
 

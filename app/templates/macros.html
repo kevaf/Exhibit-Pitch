@@ -8,10 +8,14 @@
 </div>
 </div>
 
-{%endfor%} {%endmacro%} {%macro displayReviews(reviews_list)%} {%for review in reviews_list%}
+{%endfor%} 
+{%endmacro%} 
+{%macro displayReviews(reviews_list)%} 
+<h3>Reviews</h3> <hr>
+{%for review in reviews_list%}
 
 <h5>{{review.user.username}}</h5>
-<p>{{review.comment}}</p>
+<p>{{review.review}}</p>
 
 
 {%endfor%} {%endmacro%}
