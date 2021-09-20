@@ -1,5 +1,8 @@
-{% extends 'base.html'%} {% import 'macros.html' as macro%} {% import "bootstrap/wtf.html" as wtf %} {%block styles%} {{ super() }}
 
+{% extends 'base.html'%} {% import 'macros.html' as macro%} {% import "bootstrap/wtf.html" as wtf %} {%block styles%} {{ super() }}
+<link href="https://fonts.googleapis.com/css?family=Indie+Flower|Ranga" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous"> {%endblock%}
 <!-- Content block -->
 {%block content%}
 <div class="card">
@@ -15,18 +18,18 @@
                         <p>{{pitch.p_body}}</p>
 
                         <p>Posted on {{date}} by {{pitch.user.username| capitalize}}</p>
-                        <a href="/pitch/{{pitch.id}}?like=1">
+                        <a href="/pitch/{{pitch.id}}?upvote=1">
                             <i class="far fa-thumbs-up"></i>
                         </a>{{pitch.upvote}}
-                        <a href="/pitch/{{pitch.id}}?dislike=1">
+                        <a href="/pitch/{{pitch.id}}?downvote=1">
                             <i class="far fa-thumbs-down"></i>
-                        </a>{{pitch.dowmvote}}
+                        </a>{{pitch.downvote}}
                     </div>
 
 
                     <hr>
 
-                    <hr> {% if current_user.is_authenticated %} {{ wtf.quick_form(comment_form) }} {%endif%} {{macro.displayComments(comments)}}
+                    <hr> {% if current_user.is_authenticated %} {{ wtf.quick_form(comment_form) }} {%endif%} {{macro.displayReviews(review)}}
 
                 </div>
             </div>

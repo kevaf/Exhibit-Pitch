@@ -49,7 +49,7 @@ class Pitch(db.Model):
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     upvote = db.Column(db.Integer)
     downvote = db.Column(db.Integer)
-    reviews = db.relationship('Review',backref =  'pitch_id',lazy = "dynamic")
+    reviews = db.relationship('Review',backref = 'p_id',lazy = "dynamic")
 
 
     def save_pitch(self):
@@ -95,7 +95,7 @@ class Review(db.Model):
 
     @classmethod
     def get_reviews(cls,pitch):
-        reviews = Review.query.filter_by(pitch_id=pitch).all()
+        reviews = Review.query.filter_by(p_id=pitch).all()
         return reviews
 
 

@@ -14,5 +14,5 @@ class ReviewForm(FlaskForm):
 class PitchForm(FlaskForm):
     title = StringField('Pitch title',validators=[Required()])
     text = TextAreaField('Text',validators=[Required()])
-    category = SelectField('Type',choices=[('investor','Pitch for Investors'),('employee','Pitch for Employees'),('customer','Pitch for Employees')],validators=[Required()])
+    category = SelectField('Type',choices=[('investor','Pitch for Investors'),('employee','Pitch for Employees'),('customer','Pitch for Customers')],validators=[Required()])
     submit = SubmitField('Submit')

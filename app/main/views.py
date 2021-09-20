@@ -74,7 +74,7 @@ def new_pitch():
         category = pitch_form.category.data
 
         # Updated pitch instance
-        new_pitch = Pitch(pitch_title=title,pitch_content=pitch,category=category,user=current_user,likes=0,dislikes=0)
+        new_pitch = Pitch(p_title=title,p_body=pitch,category=category,user=current_user,upvote=0,downvote=0)
 
         # Save pitch method
         new_pitch.save_pitch()
@@ -87,7 +87,10 @@ def new_pitch():
 @login_required
 def pitch(id):
     pitch = Pitch.get_pitch(id)
-    posted_date = pitch.posted.strftime('%b %d, %Y')
+    posted_date = pitch.posted_date.strftime('%b %d, %Y')
+    
+    # comments = Review
+    comments = Review.get_reviews(pitch)
 
     if request.args.get("upvote"):
         pitch.upvote = pitch.upvote + 1
@@ -95,7 +98,7 @@ def pitch(id):
         db.session.add(pitch)
         db.session.commit()
 
-        return redirect("/pitch/{pitches_id}".format(pitches_id=pitch.id))
+        return redirect("/pitch/{p_id}".format(p_id=pitch.id))
 
     elif request.args.get("downvote"):
         pitch.downvote = pitch.downvote + 1
@@ -103,7 +106,7 @@ def pitch(id):
         db.session.add(pitch)
         db.session.commit()
 
-        return redirect("/pitch/{pitches_id}".format(pitches_id=pitch.id))
+        return redirect("/pitch/{p_id}".format(p_id=pitch.id))
 
     review_form = ReviewForm()
     if review_form.validate_on_submit():
@@ -111,10 +114,10 @@ def pitch(id):
 
         new_review = Review(review = review,user = current_user,p_id = pitch)
 
-        new_review.save_comment()
+        new_review.save_review()
 
 
-    comments = Review.get_comments(pitch)
+    
 
     return render_template("pitch.html", pitch = pitch, comment_form = review_form, comments = comments, date = posted_date)
 
@@ -127,8 +130,9 @@ def investor():
 @main.route('/employee')
 @login_required
 def employee():
+    pitches = Pitch.get_pitches('employee')
     title= 'Pitch to Employees'
-    return render_template('employees_pitches.html',title=title)
+    return render_template('employees_pitches.html',title=title, pitches=pitches)
 
 @main.route('/customer')
 @login_required
